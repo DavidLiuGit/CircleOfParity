@@ -12,5 +12,5 @@ def soupify ( url ) :
 	page = requests.get(url)
 	if page.status_code >= 200 and page.status_code < 400:
 		return BeautifulSoup ( page.content, 'html.parser' )
-	else 
+	else :
 		return None
