@@ -8,7 +8,7 @@ from pprint import pprint
 
 
 BASE_URL 		= 'https://www.pro-football-reference.com/years/'
-YEAR 			= 2017
+YEAR 			= 2016
 CONTAINER_CLASS = 'game_summary'
 WINNER_CLASS	= 'winner'
 LOSER_CLASS		= 'loser'
@@ -40,10 +40,10 @@ class Team:
 		self.lost_to_list.append (lost_to_team_obj)
 
 	def __str__ ( self ):
-		return "{}: {} wins, {} losses".format(self.name, len(self.beat_list), len(self.lost_to_list))
+		return "{}: {} wins, {} losses".format( self.name, len(self.beat_list), len(self.lost_to_list))
 
 	def __repr__ ( self ):
-		return "{}: {} wins, {} losses".format(self.name, len(self.beat_list), len(self.lost_to_list))
+		return "{}: {} wins, {} losses".format( self.name, len(self.beat_list), len(self.lost_to_list))
 
 	
 
@@ -143,6 +143,7 @@ def append_results_to_dict ( teams_dict, results ):
 
 
 
+
 def post_analysis_sanity_check ( d ) :
 	"""
 	Using what we know about the NFL, do a few sanity checks on the data
@@ -160,7 +161,7 @@ def post_analysis_sanity_check ( d ) :
 ##### MAIN
 ###############################################################################
 
-def process_week ( year, week_number ):
+def process_week ( teams_dict, year, week_number ):
 	# begin by making soup out of the relevant Pro Football Reference page
 	soup = get_week_results ( year, week_number )
 
@@ -169,14 +170,22 @@ def process_week ( year, week_number ):
 
 	# the results we got back from analyze_soup can either be formatted to be saved as CSV, or
 	# used in building a data structure for further analysis in python
-	return append_results_to_dict ( script_teams_dict, results )
+	append_results_to_dict ( teams_dict, results )
 
 
 
-def main () :
+
+def main ( year = YEAR ) :
+	teams_dict = {}
+
 	# iterate thru weeks 1-17 (week_number = wk + 1)
 	for wk in range(17):
-		process_week ( YEAR, wk+1 ) 
+		process_week ( teams_dict, year, wk+1 )
+
+	# after getting back the analyzed results
+	return teams_dict
+
+	
 
 if __name__ == "__main__":
 	main()
