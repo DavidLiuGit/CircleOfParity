@@ -39,6 +39,13 @@ class Team:
 	def add_lost_to_team ( self, lost_to_team_obj ):
 		self.lost_to_list.append (lost_to_team_obj)
 
+	def __str__ ( self ):
+		return str(vars(self))
+
+	def __repr__ ( self ):
+		return str(vars(self))
+	
+
 
 
 
@@ -101,7 +108,7 @@ def analyze_soup ( soup, yr=0, wk=0 ) :
 
 
 
-def append_results ( teams_dict, results ):
+def append_results_to_dict ( teams_dict, results ):
 	"""
 	Add the latest list of results to the Teams in `teams_dict`. `results` 
 	should be a list of `GameResult` namedtuples
@@ -128,9 +135,10 @@ def append_results ( teams_dict, results ):
 		else :
 			loser_obj = Team[loser_name]
 
-		
+		# now update the beat_list and lost_to_list of the winner and loser
+		winner_obj.add_beat_team ( loser_obj )
+		loser_obj.add_lost_to_team ( winner_obj )
 
-	pprint ( teams_dict )
 
 
 
@@ -147,7 +155,7 @@ def process_week ( year, week_number ):
 
 	# the results we got back from analyze_soup can either be formatted to be saved as CSV, or
 	# used in building a data structure for further analysis in python
-	append_results ( script_teams_dict, results )
+	append_results_to_dict ( script_teams_dict, results )
 
 
 
