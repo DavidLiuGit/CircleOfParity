@@ -158,5 +158,8 @@ def process_week ( year, week_number ):
 	append_results_to_dict ( script_teams_dict, results )
 
 
+def main () :
+	process_week ( YEAR, 1 ) 
 
-process_week ( YEAR, 1 ) 
+if __name__ == "__main__":
+	main()
