@@ -3,6 +3,7 @@
 
 from soupify import soupify
 from collections import namedtuple
+from pprint import pprint
 
 
 
@@ -21,6 +22,22 @@ DRAW_CLASS		= 'draw'
 ###############################################################################
 
 GameResult = namedtuple ( 'GameResult', 'winner loser winner_score loser_score year week' )
+
+script_teams_dict = {}
+
+
+class Team:
+
+	def __init__ ( self, name ):
+		self.name = name
+		self.beat_list = []
+		self.lost_to_list = []
+
+	def add_beat_team ( self, beaten_team_obj ):
+		self.beat_list.append (beaten_team_obj)
+
+	def add_lost_to_team ( self, lost_to_team_obj ):
+		self.lost_to_list.append (lost_to_team_obj)
 
 
 
@@ -84,6 +101,36 @@ def analyze_soup ( soup, yr=0, wk=0 ) :
 
 
 
+def append_results ( teams_dict, results ):
+	"""
+	Add the latest list of results to the Teams in `teams_dict`. `results` 
+	should be a list of `GameResult` namedtuples
+	"""
+	assert isinstance(teams_dict, dict), "Error: teams_dict argument must be a dict"
+
+	# iterate thru each GameResult namedtuple in results 
+	for res in results :
+		winner_name = res.winner
+		loser_name = res.loser
+
+		# for both the loser and winner: if the team name is not in the dict
+		# a new Team object must be instantiated for that team
+		# the object is added to the teams_dict, whose key will be the name of the team
+		if not winner_name in teams_dict :
+			winner_obj = Team(winner_name)
+			teams_dict[winner_name] = winner_obj
+		else :
+			winner_obj = teams_dict[winner_name]
+		# repeat the process with the loser
+		if not loser_name in teams_dict:
+			loser_obj = Team(loser_name)
+			teams_dict[loser_name] = loser_obj
+		else :
+			loser_obj = Team[loser_name]
+
+		
+
+	pprint ( teams_dict )
 
 
 
@@ -96,6 +143,12 @@ def process_week ( year, week_number ):
 	soup = get_week_results ( year, week_number )
 
 	# now that we have a page with all the match results of a given week, analyze it
-	res = analyze_soup ( soup, year, week_number )
+	results = analyze_soup ( soup, year, week_number )
+
+	# the results we got back from analyze_soup can either be formatted to be saved as CSV, or
+	# used in building a data structure for further analysis in python
+	append_results ( script_teams_dict, results )
+
+
 
 process_week ( YEAR, 1 ) 
