@@ -133,11 +133,21 @@ def append_results_to_dict ( teams_dict, results ):
 			loser_obj = Team(loser_name)
 			teams_dict[loser_name] = loser_obj
 		else :
-			loser_obj = Team[loser_name]
+			loser_obj = teams_dict[loser_name]
 
 		# now update the beat_list and lost_to_list of the winner and loser
 		winner_obj.add_beat_team ( loser_obj )
 		loser_obj.add_lost_to_team ( winner_obj )
+
+
+
+
+def post_analysis_sanity_check ( teams_dict ) :
+	"""
+	Using what we know about the NFL, do a few sanity checks on the data
+	"""
+	assert len(teams_dict) == 32, "Error: there should be exactly 32 teams in the teams_dict"
+	# assert 
 
 
 
@@ -155,11 +165,17 @@ def process_week ( year, week_number ):
 
 	# the results we got back from analyze_soup can either be formatted to be saved as CSV, or
 	# used in building a data structure for further analysis in python
-	append_results_to_dict ( script_teams_dict, results )
+	teams_dict = append_results_to_dict ( script_teams_dict, results )
+
+	# sanity check the data
+	post_analysis_sanity_check ( teams_dict )
+
 
 
 def main () :
-	process_week ( YEAR, 1 ) 
+	# iterate thru weeks 1-17 (week_number = wk + 1)
+	for wk in range(17):
+		process_week ( YEAR, wk+1 ) 
 
 if __name__ == "__main__":
 	main()
