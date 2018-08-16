@@ -32,6 +32,7 @@ class Team:
 		self.name = name
 		self.beat_list = []
 		self.lost_to_list = []
+		self.visited = False
 
 	def add_beat_team ( self, beaten_team_obj ):
 		self.beat_list.append (beaten_team_obj)
