@@ -44,3 +44,10 @@ In this graph, we look for a [Hamiltonian cycle](https://en.wikipedia.org/wiki/H
 
 Finding a Hamiltonian cycle (or determining if one exists) is an NP-complete problem. Luckily, most leagues do not have too many teams, and the computation time should not be too unreasonable, even with a slightly optimized brute-force algorithm.
 
+
+
+#### Brute-force DFS
+
+The brute force algorithm is currently used for NFL results and is sufficiently fast, able to find most Circle of Parities in a few seconds. 
+
+The team with the fewest wins is chosen as the root. This may or may not speed up the process a bit.
