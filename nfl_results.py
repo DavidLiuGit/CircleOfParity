@@ -4,6 +4,7 @@
 from soupify import soupify
 from collections import namedtuple
 from pprint import pprint
+from circle_of_parity import Team, GameResult
 
 
 
@@ -21,33 +22,7 @@ DRAW_CLASS		= 'draw'
 ##### CLASS DECLARATIONS
 ###############################################################################
 
-GameResult = namedtuple ( 'GameResult', 'winner loser winner_score loser_score year week' )
-
 script_teams_dict = {}
-
-
-class Team:
-
-	def __init__ ( self, name ):
-		self.name = name
-		self.beat_list = []
-		self.lost_to_list = []
-		self.visited = False
-
-	def add_beat_team ( self, beaten_team_obj ):
-		self.beat_list.append (beaten_team_obj)
-
-	def add_lost_to_team ( self, lost_to_team_obj ):
-		self.lost_to_list.append (lost_to_team_obj)
-
-	def __str__ ( self ):
-		return "{}: {} wins, {} losses".format( self.name, len(self.beat_list), len(self.lost_to_list))
-
-	def __repr__ ( self ):
-		return "{}: {} wins, {} losses".format( self.name, len(self.beat_list), len(self.lost_to_list))
-
-	
-
 
 
 

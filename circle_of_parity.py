@@ -8,8 +8,33 @@ from collections import namedtuple
 ##### DATA STRUCTURES
 ###############################################################################
 
+
+GameResult = namedtuple ( 'GameResult', 'winner loser winner_score loser_score year week' )
+
 # linked list (bi-directional)
 LL = namedtuple ( 'LL', ['this', 'next', 'prev'] )
+
+
+class Team:
+
+	def __init__ ( self, name ):
+		self.name = name
+		self.beat_list = []
+		self.lost_to_list = []
+		self.visited = False
+
+	def add_beat_team ( self, beaten_team_obj ):
+		self.beat_list.append (beaten_team_obj)
+
+	def add_lost_to_team ( self, lost_to_team_obj ):
+		self.lost_to_list.append (lost_to_team_obj)
+
+	def __str__ ( self ):
+		return "{}: {} wins, {} losses".format( self.name, len(self.beat_list), len(self.lost_to_list))
+
+	def __repr__ ( self ):
+		return "{}: {} wins, {} losses".format( self.name, len(self.beat_list), len(self.lost_to_list))
+
 
 
 ###############################################################################
@@ -103,7 +128,8 @@ def presolve_sanity_check ( teams_dict, strict_circle=True ):
 	"""
 	
 	for team in teams_dict.values():
-		assert isinstance ( team, nfl_results.Team ), "Error: object is not instance of nfl_results.Team"
+		# how should we do this check? make sure team is an instance of Team
+		# assert team is Team, "Error: object is not instance of Team, but {} instead".format(type(team))
 		if strict_circle:
 			assert len(team.beat_list), "Error: a circle of parity CANNOT be created. {} does not have any wins".format(team)
 			assert len(team.lost_to_list), "Error: a circle of parity CANNOT be created. {} does not have any losses".format(team)
@@ -122,7 +148,7 @@ def postsolve_sanity_check ( teams_dict, ham_map ):
 
 	# iterate thru each team in the map, and make sure that each is valid
 	for i in range(len(teams_dict)):
-		assert isinstance ( ham_map[i], nfl_results.Team ), "Error: element in ham_map is NOT an instance of Team"
+		# assert isinstance ( ham_map[i], Team ), "Error: element in ham_map is NOT an instance of Team"
 		assert ham_map[i] in ham_map[i-1].beat_list, "Error: {} did NOT beat {}. WTF?".format(ham_map[i-1].name, ham_map[i].name)
 
 	print ( "Postsolve sanity check OK" )
@@ -142,7 +168,7 @@ def main ( args ) :
 	# dict contains graph nodes - representing teams, 
 	# each with references (vertices) to other teams that they beat/lost to
 
-	teams_dict = nfl_results.main ( 2009 )
+	teams_dict = nfl_results.main ( 'iasdfjaosdokf' )
 	pprint ( teams_dict )
 
 	# do a sanity check first
@@ -159,10 +185,13 @@ def main ( args ) :
 		print (e)
 		print ( "Error: failed postsolve sanity check" )
 		exit(1)
+
+	print ( "\n\nFound a Hamiltonian cycle, and therefore, a Circle of Parity:" )
 	pprint (ham_map)
 
 
 
 
+# if this script is being executed from cmd line, get 2016 results unless year specified
 if __name__ == "__main__":
 	main ( sys.argv )
