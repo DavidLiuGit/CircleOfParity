@@ -151,7 +151,7 @@ def process_week ( teams_dict, year, week_number ):
 	soup = get_week_results ( year, week_number )
 
 	# now that we have a page with all the match results of a given week, analyze it
-	results = analyze_soup ( soup, year, week_number, True )
+	results = analyze_soup ( soup, year, week_number, False )
 
 	# the results we got back from analyze_soup can either be formatted to be saved as CSV, or
 	# used in building a data structure for further analysis in python
