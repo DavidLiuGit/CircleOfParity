@@ -1,0 +1,1 @@
+# this script will scrape information for NHL games for a given year

@@ -109,7 +109,7 @@ def brute_force ( teams_dict ):
 	max_depth = len ( teams_dict )	# the hamiltonian cycle must visit this many vertices, EXACTLY once
 
 	# determine seeds: use the team with most wins (best_seed), and team with least wins (worst_seed)
-	best_seed = num_wins_sorted[-1]			# currently not in use
+	#best_seed = num_wins_sorted[-1]			# currently not in use
 	worst_seed= num_wins_sorted[0]			
 	
 	# use a map to track the path explored
@@ -168,7 +168,7 @@ def main ( args ) :
 	# dict contains graph nodes - representing teams, 
 	# each with references (vertices) to other teams that they beat/lost to
 
-	teams_dict = nfl_results.main ( 'iasdfjaosdokf' )
+	teams_dict = nfl_results.main ( args[1] )
 	pprint ( teams_dict )
 
 	# do a sanity check first

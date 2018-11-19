@@ -30,12 +30,17 @@ script_teams_dict = {}
 ##### HELPER FUNCTIONS
 ###############################################################################
 
+def build_results_url ( year, week_number ):
+	url = BASE_URL + "{}/week_{}.htm".format(year, week_number)
+	return url
+
+
 def get_week_results ( year, week_number ) :
 	"""
-	Build the request URL, and make the request
+	Build the request URL, and make the request. Return the HTML result as soup
 	"""
 
-	url = BASE_URL + '{}/week_{}.htm'.format(year, week_number)
+	url = build_results_url ( year, week_number )
 	print ( 'requesting {}'.format(url) )
 	soup = soupify ( url )
 	if soup is None:
@@ -47,7 +52,7 @@ def get_week_results ( year, week_number ) :
 
 
 
-def analyze_soup ( soup, yr=0, wk=0 ) :
+def analyze_soup ( soup, yr=0, wk=0, verbose=False ) :
 	"""
 	Given the soup of a PFR weekly results page, analyze the games that happened in the week.
 	Return a list of namedtuples, containing the results of each game
@@ -55,6 +60,7 @@ def analyze_soup ( soup, yr=0, wk=0 ) :
 
 	# get a list of every game
 	all_games = soup.find_all ( 'div', class_=CONTAINER_CLASS )
+	if verbose: print (all_games)
 	analyzed_games = []
 
 	# for each game in the list, get the winner, loser, score
@@ -80,6 +86,7 @@ def analyze_soup ( soup, yr=0, wk=0 ) :
 			analyzed_games.append(game_result)	# add this game to the list of analyzed games
 		# if there was no winner/loser (e.g. ended in a draw), it will not be added to analyzed_games
 
+	if verbose: print (analyzed_games)
 	return analyzed_games
 
 
@@ -115,6 +122,8 @@ def append_results_to_dict ( teams_dict, results ):
 		# now update the beat_list and lost_to_list of the winner and loser
 		winner_obj.add_beat_team ( loser_obj )
 		loser_obj.add_lost_to_team ( winner_obj )
+	
+	return results
 
 
 
@@ -142,11 +151,12 @@ def process_week ( teams_dict, year, week_number ):
 	soup = get_week_results ( year, week_number )
 
 	# now that we have a page with all the match results of a given week, analyze it
-	results = analyze_soup ( soup, year, week_number )
+	results = analyze_soup ( soup, year, week_number, True )
 
 	# the results we got back from analyze_soup can either be formatted to be saved as CSV, or
 	# used in building a data structure for further analysis in python
-	append_results_to_dict ( teams_dict, results )
+	results = append_results_to_dict ( teams_dict, results )
+	return results
 
 
 

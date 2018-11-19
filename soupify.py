@@ -10,7 +10,9 @@ def soupify ( url ) :
 	"""
 
 	page = requests.get(url)
-	if page.status_code >= 200 and page.status_code < 400:
+	print ("return code {}".format(page.status_code))
+	if page.status_code >= 200 and page.status_code < 300:
 		return BeautifulSoup ( page.content, 'html.parser' )
 	else :
+		print ( "page requested did NOT return with OK" )
 		return None
