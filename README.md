@@ -9,7 +9,6 @@ With a little bit of creative abuse of inductive logic:
    - this implies that Browns > Chargers
 2. The Chargers defeated the Broncos in week 6
    - this implies that Chargers > Broncos
-   - --
 3. Therefore, Browns > Chargers > Broncos
 
 With a Circle of Parity, we can apply the same logic and "prove" that any team in the circle is better than any other team. In the 2016 example, we can also prove that the Broncos were better than the Browns.
@@ -51,3 +50,10 @@ Finding a Hamiltonian cycle (or determining if one exists) is an NP-complete pro
 The brute force algorithm is currently used for NFL results and is sufficiently fast, able to find most Circle of Parities in a few seconds. 
 
 The team with the fewest wins is chosen as the root. This may or may not speed up the process a bit.
+
+
+## Script Usage
+Intended for use with `python3`. Results will be for NFL, by default.
+```bash
+python circle_of_parity.py <year>
+```
